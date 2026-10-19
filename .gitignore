@@ -1,0 +1,13 @@
+# Ignore everything in the Codex home by default.
+/*
+
+# Keep this allowlist and portable Codex configuration.
+!/.gitignore
+!/config.toml
+!/AGENTS.md
+!/skills/
+!/rules/
+
+# Exclude generated Python caches inside tracked skill directories.
+__pycache__/
+*.py[cod]

@@ -1,0 +1,199 @@
+# MODEL AND EXECUTION DEFAULTS
+# Requested response style. Newer Codex versions may ignore this legacy setting.
+personality = "pragmatic"
+# Default model for new sessions; individual sessions can override it.
+model = "gpt-6.1-sol"
+
+# External notification command invoked by Codex. This app-provided helper
+# receives the "turn-ended" argument and notification data from Codex.
+notify = ["/Users/robertmolina/.codex/computer-use/Codex Computer Use.app/Contents/SharedSupport/SkyComputerUseClient.app/Contents/MacOS/SkyComputerUseClient", "turn-ended"]
+# Requested reasoning effort: medium balances deliberation and response time.
+model_reasoning_effort = "medium"
+# Let the agent request approval when an action needs additional permissions.
+approval_policy = "on-request"
+# Route approval requests to automatic risk-based review by a guardian agent.
+# "guardian_subagent" is the legacy spelling of "auto_review".
+approvals_reviewer = "guardian_subagent"
+# Restrict shell writes to the workspace and other explicitly permitted paths.
+sandbox_mode = "workspace-write"
+
+# Additional defaults from fcakyon/claude-codex-settings.
+# Use live web search rather than cached-only search results.
+web_search = "live"
+# Override the context-window size Codex assumes, in tokens. This does not
+# increase the model's actual capacity; it must match what the model supports.
+model_context_window = 500000
+# Token threshold for automatic conversation compaction (summarizing context).
+# This equals the configured window; runtime/model limits may compact earlier.
+model_auto_compact_token_limit = 500000
+# Request standard service rather than a priority or flex service tier.
+service_tier = "default"
+
+[sandbox_workspace_write]
+# Permit network access for shell commands inside the workspace-write sandbox.
+network_access = true
+
+[analytics]
+# Disable Codex product analytics; this is not a model-training/data policy.
+enabled = false
+
+[tui]
+# CLI footer indicators: model/reasoning effort, context used, weekly usage
+# limit, and task progress. This controls the terminal UI, not Desktop's layout.
+status_line = ["model-with-reasoning", "context-used", "weekly-limit", "task-progress"]
+
+[agents]
+# Cap concurrently open spawned-agent threads per session; does not spawn eight
+# agents automatically or configure OMX/tmux teams.
+max_concurrent_threads_per_session = 8
+
+# PROJECT TRUST
+# Trust determines whether project-local configuration is eligible to load.
+# It does not disable sandboxing or approve every command in a trusted project.
+# Keep the broad home-directory entry untrusted; opt in specific projects below.
+[projects."/Users/robertmolina"]
+trust_level = "untrusted"
+
+[projects."/Users/robertmolina/Projects/journl"]
+trust_level = "trusted"
+
+[projects."/Users/robertmolina/Projects/arc2zen"]
+trust_level = "trusted"
+
+[projects."/Users/robertmolina/.config/zed"]
+trust_level = "trusted"
+
+[projects."/Users/robertmolina/Projects/domain"]
+trust_level = "trusted"
+
+[projects."/Users/robertmolina/Projects/personal"]
+trust_level = "trusted"
+
+[projects."/Users/robertmolina/Projects/servifai"]
+trust_level = "trusted"
+
+[notice.model_migrations]
+# Remember a model-migration notice/mapping; the active model is set above.
+"gpt-5.2-codex" = "gpt-5.3-codex"
+
+# DESKTOP PREFERENCES
+# These app-specific keys can change meaning or availability between builds.
+[desktop]
+# Queue follow-up messages while the agent is busy.
+followUpQueueMode = "queue"
+# Internal display-mode value for the conversation's step/prose presentation.
+conversationDetailMode = "STEPS_PROSE"
+# Disable proactive/ambient task suggestions.
+ambient-suggestions-enabled = false
+# Hide project entries from the sidebar's recents view.
+sidebar-show-projects-in-recents = false
+# Keep remote-control functionality awake while connected to power.
+keepRemoteControlAwakeWhilePluggedIn = true
+# Enable the app's agent-usage-reset feature (exact behavior is build-dependent).
+agent-usage-reset-enabled = true
+# Open ordinary links in the external browser.
+open-link-in-target-preference = "external-browser"
+# Open code-review GitHub links in the external browser.
+code-review-github-link-target = "external-browser"
+# Prevent system sleep while the agent is running.
+preventSleepWhileRunning = true
+
+# PLUGIN SOURCES
+# These marketplaces are local catalogs supplied by the installed app/runtime.
+# "local" means read the catalog at the filesystem path in "source".
+[marketplaces.openai-bundled]
+source_type = "local"
+source = "/Users/robertmolina/.codex/.tmp/bundled-marketplaces/openai-bundled"
+
+[marketplaces.openai-primary-runtime]
+source_type = "local"
+source = "/Users/robertmolina/.cache/codex-runtimes/codex-primary-runtime/plugins/openai-primary-runtime"
+
+# ENABLED PLUGINS
+# Names use "plugin@marketplace". Enabling a plugin makes its packaged tools,
+# skills, and other integrations available; it does not invoke them automatically.
+# General Codex app integrations.
+[plugins."codex-app-tools@openai-bundled"]
+enabled = true
+
+# Browser interaction tools.
+[plugins."browser@openai-bundled"]
+enabled = true
+
+# Unified computer-use integration supplied by this app build.
+[plugins."unified-computer-use@openai-bundled"]
+enabled = true
+
+# Visualization tools and workflows.
+[plugins."visualize@openai-bundled"]
+enabled = true
+
+# Document creation and editing workflows.
+[plugins."documents@openai-primary-runtime"]
+enabled = true
+
+# PDF workflows.
+[plugins."pdf@openai-primary-runtime"]
+enabled = true
+
+# Spreadsheet workflows.
+[plugins."spreadsheets@openai-primary-runtime"]
+enabled = true
+
+# Presentation/slide workflows.
+[plugins."presentations@openai-primary-runtime"]
+enabled = true
+
+# Template-creation workflows.
+[plugins."template-creator@openai-primary-runtime"]
+enabled = true
+
+# Computer-use tools supplied by this app build.
+[plugins."computer-use@openai-bundled"]
+enabled = true
+
+# Code-review workflows.
+[plugins."code-review@openai-bundled"]
+enabled = true
+
+# LOCAL TOOL SERVER
+# MCP (Model Context Protocol) connects Codex to tools. This app-provided server
+# runs a persistent JavaScript/Node environment used by browser/computer tools.
+[mcp_servers.node_repl]
+# No additional command-line arguments.
+args = []
+# Executable launched to start the server.
+command = "/Applications/ChatGPT.app/Contents/Resources/cua_node/bin/node_repl"
+# Allow up to 120 seconds for server startup.
+startup_timeout_sec = 120
+
+# Environment variables passed to this server process. These paths and version
+# values are installation-specific runtime wiring, rather than portable defaults.
+[mcp_servers.node_repl.env]
+# Native pipe connection timeout, in milliseconds.
+NODE_REPL_NATIVE_PIPE_CONNECT_TIMEOUT_MS = "1000"
+# Directory for resolving the app's bundled Node modules.
+NODE_REPL_NODE_MODULE_DIRS = "/Applications/ChatGPT.app/Contents/Resources/cua_node/lib/node_modules"
+# Node executable used by the runtime.
+NODE_REPL_NODE_PATH = "/Applications/ChatGPT.app/Contents/Resources/cua_node/bin/node"
+# Colon-separated code paths trusted by this tool runtime; not project trust.
+NODE_REPL_TRUSTED_CODE_PATHS = "/Users/robertmolina/.codex:/Applications/ChatGPT.app/Contents/Resources/cua_node/lib/node_modules"
+# Codex home directory exposed to the server.
+CODEX_HOME = "/Users/robertmolina/.codex"
+# Available browser backend identifiers: Chrome, in-app browser, and MCP apps.
+BROWSER_USE_AVAILABLE_BACKENDS = "chrome,iab,mcpapps"
+# Enable the runtime's TinySky computer-use integration.
+BROWSER_USE_TINYSKY_ENABLED = "1"
+# Empty use-case instruction overrides; interpretation is runtime-specific.
+NODE_REPL_INSTRUCTIONS_USE_CASE_BROWSER = ""
+NODE_REPL_INSTRUCTIONS_USE_CASE_CHROME = ""
+NODE_REPL_INSTRUCTIONS_USE_CASE_COMPUTER_USE = ""
+# Identify the app build to browser/runtime integrations.
+BROWSER_USE_CODEX_APP_BUILD_FLAVOR = "prod"
+BROWSER_USE_CODEX_APP_VERSION = "26.930.51102"
+# JSON mapping of trusted service names to their module paths.
+NODE_REPL_TRUSTED_SERVICES = '{"browser":"/Users/robertmolina/.codex/plugins/cache/openai-bundled/browser/26.930.51102/scripts/browser-service.mjs","sky":"@oai/sky/service"}'
+# App bundle providing the native computer-use service.
+SKY_CUA_SERVICE_PATH = "/Users/robertmolina/.codex/computer-use/Codex Computer Use.app"
+# Bundled Codex CLI executable available to the tool runtime.
+CODEX_CLI_PATH = "/Applications/ChatGPT.app/Contents/Resources/codex-cli/CodexCLI.app/Contents/MacOS/codex"
